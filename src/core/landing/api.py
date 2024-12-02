@@ -23,10 +23,10 @@ def send_request_api_view(request: HttpRequest) -> JsonResponse:
 {tariff_type}
 """
     requests.post(
-        url=f"https://api.telegram.org/bot1961963116:AAGzIJNqUnTV9OJOW18wcNmyd4eheLtsx0c/sendMessage?chat_id=1053749474&text={text}&parse_mode=HTML"
+        url=f"https://api.telegram.org/bot{{}}/sendMessage?chat_id=1053749474&text={text}&parse_mode=HTML"
     )
     requests.post(
-        url=f"https://api.telegram.org/bot1961963116:AAGzIJNqUnTV9OJOW18wcNmyd4eheLtsx0c/sendMessage?chat_id={chat_id}&text={text}&parse_mode=HTML"
+        url=f"https://api.telegram.org/bot{{}}/sendMessage?chat_id={chat_id}&text={text}&parse_mode=HTML"
     )
 
     return JsonResponse({"ok": True})
