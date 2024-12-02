@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{ include "mezhgortrans.fullname" . }}
+spec:
+  replicas: {{ .Values.replicaCount }}
+  selector:
+    matchLabels:
+      app: {{ include "mezhgortrans.name" . }}
+  template:
+    metadata:
+      labels:
+        app: {{ include "mezhgortrans.name" . }}
+    spec:
+      containers:
+        - name: {{ .Chart.Name }}
+          image: "{{ .Values.image.repository }}:{{ .Values.image.tag }}"
+          ports:
+            - containerPort: 8001
+          envFrom:
+            - configMapRef:
+                name: {{ include "mezhgortrans.fullname" . }}-config
+            - secretRef:
+                name: {{ include "mezhgortrans.fullname" . }}-secrets
+          volumeMounts:
+            - name: {{ include "mezhgortrans.fullname" . }}-storage
+              mountPath: /app/core/
+      volumes:
+        - name: {{ include "mezhgortrans.fullname" . }}-storage
+          persistentVolumeClaim:
+            claimName: {{ include "mezhgortrans.fullname" . }}-pvc

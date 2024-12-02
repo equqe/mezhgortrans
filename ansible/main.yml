@@ -1,0 +1,29 @@
+---
+- name: Configure Yandex Cloud instance
+  hosts: yandex_instance
+  become: yes
+  tasks:
+    - name: Ensure Docker is installed
+      ansible.builtin.apt:
+        name: docker.io
+        state: present
+        update_cache: yes
+
+    - name: Ensure Kubectl is installed
+      ansible.builtin.get_url:
+        url: https://storage.googleapis.com/kubernetes-release/release/v1.21.0/bin/linux/amd64/kubectl
+        dest: /usr/local/bin/kubectl
+        mode: '0755'
+
+    - name: Ensure Helm is installed
+      ansible.builtin.unarchive:
+        src: https://get.helm.sh/helm-v3.6.3-linux-amd64.tar.gz
+        dest: /usr/local/bin/
+        remote_src: yes
+        extra_opts: [--strip-components=1]
+
+    - name: Start Docker service
+      ansible.builtin.service:
+        name: docker
+        state: started
+        enabled: yes
